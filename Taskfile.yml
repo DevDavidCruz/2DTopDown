@@ -1,0 +1,72 @@
+
+version: '3'
+
+tasks:
+####### Windows Commands
+  clean:
+    cmds: [
+      "echo cleaning...", 
+      # "rm -rf ./bin/src"
+    ]
+    silent: true
+    method: none
+    aliases:
+      - c
+
+  build-windows:
+    platforms: [windows]
+    aliases:
+      - b-win
+    deps:
+      - clean
+    cmds: [
+      "echo build-starting...",
+      "odin build src -out=bin/src.exe",
+      "echo build-complete..."
+    ]
+    silent: true
+    sources:
+      - ./src/**/*/.odin
+    generates:
+      - bin/src
+
+  run-windows:
+    platforms: [windows]
+    aliases:
+      - r-win
+    deps:
+      - build-windows
+    cmds:
+      - bin/src.exe
+    silent: true
+    method: none
+
+
+####### MAC Commands
+  build-mac:
+    platforms: [darwin]
+    aliases:
+      - b-mac
+    deps:
+      - clean
+    cmds: [
+      "echo build-starting...",
+      "odin build src -out=bin/src",
+      "echo build-complete..."
+    ]
+    silent: true
+    sources:
+      - ./src/**/*/.odin
+    generates:
+      - bin/src
+
+  run-mac:
+    platforms: [windows]
+    aliases:
+      - r-mac
+    deps:
+      - build-mac
+    cmds:
+      - bin/src.exe
+    silent: true
+    method: none
