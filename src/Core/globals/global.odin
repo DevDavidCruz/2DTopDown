@@ -8,5 +8,4 @@ WIN_HEIGHT: i32
 WIN_BORDERLESS: bool
 
 
-PLAYER : ent.Entity
-
+PLAYER: ent.Entity

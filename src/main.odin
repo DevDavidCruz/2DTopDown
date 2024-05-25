@@ -47,7 +47,7 @@ main :: proc() {
 
 on_game_update :: proc() {
 	game.render_entity(&game.g_mem.renderer, &g.PLAYER)
-  g.PLAYER.update(&g.PLAYER)
+	g.PLAYER.update(&g.PLAYER)
 }
 
 
