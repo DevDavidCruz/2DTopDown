@@ -1,5 +1,6 @@
 package Core
 import g "globals"
+import "io"
 import sdl "vendor:sdl2"
 
 
@@ -59,18 +60,13 @@ start :: proc() -> (success: bool) {
 
 			#partial switch event.type {
 			case .KEYDOWN:
+				io.handle_key_down(event.key.keysym.sym)
 				#partial switch event.key.keysym.sym {
 				case .ESCAPE:
 					break main_loop
-				case .u:
-					g.PLAYER.transform.position.x += 1
-				case .o:
-					g.PLAYER.transform.position.x -= 1
-				case .PERIOD:
-					g.PLAYER.transform.position.y -= 1
-				case .e:
-					g.PLAYER.transform.position.y += 1
 				}
+			case .KEYUP:
+				io.handle_key_up(event.key.keysym.sym)
 			case .QUIT:
 				break main_loop
 			}
