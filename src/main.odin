@@ -19,6 +19,7 @@ main :: proc() {
 		/// WIN_WIDTH = Window Width
 		/// WIN_HEIGHT = Window Height
 		g.GAME_TITLE = "2D Top Down"
+		g.FPS = 240
 		g.WIN_WIDTH = 1920
 		g.WIN_HEIGHT = 1080
 		g.PLAYER = ent.create({0.0, 0.0})
@@ -45,15 +46,17 @@ main :: proc() {
 }
 
 
-on_game_update :: proc() {
+on_game_update :: proc(delta_time: f32) {
+  fmt.println("Delta time = ", delta_time)
 	game.render_entity(&game.g_mem.renderer, &g.PLAYER)
-	g.PLAYER.update(&g.PLAYER)
+	g.PLAYER.update(&g.PLAYER, delta_time)
 }
 
 
-on_player_update :: proc(entity: ^ent.Entity) {
-	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.U] * 1)
-	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.O] * (-1))
-	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.PERIOD] * (-1))
-	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.E] * (1))
+on_player_update :: proc(entity: ^ent.Entity, delta_time: f32) {
+  speed : f32 = 250.0
+	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.U] * 1) * delta_time * speed
+	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.O] * (-1)) * delta_time * speed
+	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.PERIOD] * (-1)) * delta_time * speed
+	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.E] * (1)) * delta_time * speed
 }

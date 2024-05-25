@@ -1,4 +1,6 @@
 package Core
+import "core:fmt"
+import "core:math"
 import g "globals"
 import "io"
 import sdl "vendor:sdl2"
@@ -12,7 +14,7 @@ Game :: struct {
 	window:   Window,
 	renderer: Renderer,
 	start:    proc() -> bool,
-	update:   proc(),
+	update:   proc(delta_time: f32),
 }
 
 
@@ -48,14 +50,16 @@ deinit :: proc() {
   }
 */
 start :: proc() -> (success: bool) {
+	FRAME_DELAY: u32 = 1000 / g.FPS
+
 	success = true
+	fmt.print("START")
 
+	LAST_UPDATE: u32
 	main_loop: for {
+		FRAME_START := sdl.GetTicks()
+
 		event: sdl.Event
-
-		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
-		sdl.RenderClear(g_mem.renderer.ren)
-
 		for sdl.PollEvent(&event) != false {
 
 			#partial switch event.type {
@@ -71,10 +75,27 @@ start :: proc() -> (success: bool) {
 				break main_loop
 			}
 		}
+		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
+		sdl.RenderClear(g_mem.renderer.ren)
 
-		g_mem.update()
+		/// PHYSICS LOOP  //////////////////////////////////////////////////////////////////////////
+		CURRENT_TIME: u32 = sdl.GetTicks()
+		DELTA_TIME: f32 = f32(CURRENT_TIME - LAST_UPDATE) / 1000.0
+		g_mem.update(DELTA_TIME)
+		LAST_UPDATE = CURRENT_TIME
+		////////////////////////////////////////////////////////////////////////////////////////////
 
 		sdl.RenderPresent(g_mem.renderer.ren)
+
+		FRAME_END := sdl.GetTicks()
+		FRAME_TIME: f32 = f32(FRAME_END - FRAME_START) / 1000.0
+		//FPS: f32 = 1.0 / FRAME_TIME
+
+		if f32(FRAME_DELAY) > FRAME_TIME {
+			sdl.Delay(FRAME_DELAY - u32(FRAME_TIME))
+			delay_fps: f32 = (1.0 / f32(FRAME_DELAY)) * 1000.0
+			fmt.println(delay_fps)
+		}
 	}
 
 	return success

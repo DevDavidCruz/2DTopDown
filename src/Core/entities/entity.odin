@@ -5,7 +5,7 @@ import eng "../engine"
 Entity :: struct {
 	using transform: eng.Transform,
 	variant:         union {},
-	update:          proc(entity: ^Entity),
+	update:          proc(entity: ^Entity, delta_time: f32),
 }
 
 create :: proc(pos: eng.v2f) -> Entity {

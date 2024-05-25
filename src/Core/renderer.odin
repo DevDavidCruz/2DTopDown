@@ -16,7 +16,7 @@ create_renderer :: proc(window: ^Window, renderer: ^Renderer) -> bool {
 	renderer.ren = sdl.CreateRenderer(
 		window.win,
 		-1,
-		sdl.RENDERER_ACCELERATED | sdl.RENDERER_PRESENTVSYNC,
+		sdl.RENDERER_ACCELERATED,
 	)
 
 	assert(renderer.ren != nil, "Failed to create SDL2 Renderer")
