@@ -1,5 +1,6 @@
 package main
 import game "Core"
+import ent "Core/entities"
 import g "Core/globals"
 import "core:fmt"
 import "core:mem"
@@ -18,6 +19,7 @@ main :: proc() {
 		g.GAME_TITLE = "2D Top Down"
 		g.WIN_WIDTH = 1920
 		g.WIN_HEIGHT = 1080
+		g.PLAYER = ent.create({0.0, 0.0})
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		//// INITIALIZE GAME /////////////////////////////////////////////////////////////////////////////////
@@ -41,4 +43,9 @@ main :: proc() {
 
 
 on_game_update :: proc() {
+  game.render_entity(&game.g_mem.renderer, &g.PLAYER)
+}
+
+
+on_player_update::proc(){
 }
