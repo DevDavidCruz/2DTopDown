@@ -31,12 +31,4 @@ destroy_renderer :: proc(renderer: ^Renderer) {
 
 
 render_entity :: proc(renderer: ^Renderer, entity: ^ent.Entity) {
-	rect: sdl.FRect
-	rect.x = entity.transform.position.x
-	rect.y = entity.transform.position.y
-	rect.w = 16
-	rect.h = 16
-
-	sdl.SetRenderDrawColor(renderer.ren, 255, 0, 0, 255)
-	sdl.RenderFillRectF(renderer.ren, &rect)
 }
