@@ -1,5 +1,6 @@
 package main
 import game "Core"
+import ent "Core/entities"
 import g "Core/globals"
 import "core:fmt"
 import "core:mem"
@@ -11,21 +12,22 @@ main :: proc() {
 	defer mem.tracking_allocator_destroy(&track)
 	context.allocator = mem.tracking_allocator(&track)
 	{
-    //// SET GLOBALS FOR GAME SUCH AS ////////////////////////////////////////////////////////////////////
-    /// GAME_TITLE = Game Title
-    /// WIN_WIDTH = Window Width
-    /// WIN_HEIGHT = Window Height
+		//// SET GLOBALS FOR GAME SUCH AS ////////////////////////////////////////////////////////////////////
+		/// GAME_TITLE = Game Title
+		/// WIN_WIDTH = Window Width
+		/// WIN_HEIGHT = Window Height
 		g.GAME_TITLE = "2D Top Down"
 		g.WIN_WIDTH = 1920
 		g.WIN_HEIGHT = 1080
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+		g.PLAYER = ent.create({0.0, 0.0})
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //// INITIALIZE GAME /////////////////////////////////////////////////////////////////////////////////
+		//// INITIALIZE GAME /////////////////////////////////////////////////////////////////////////////////
 		res := game.init()
 		assert(res == true, "Failed to initialize game")
 		defer game.deinit()
-    game.g_mem.update = on_game_update
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+		game.g_mem.update = on_game_update
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		game.start()
 	}
@@ -40,6 +42,10 @@ main :: proc() {
 }
 
 
+on_game_update :: proc() {
+  game.render_entity(&game.g_mem.renderer, &g.PLAYER)
+}
 
-on_game_update::proc(){
+
+on_player_update::proc(){
 }

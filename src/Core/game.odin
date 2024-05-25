@@ -2,8 +2,9 @@ package Core
 import g "globals"
 import sdl "vendor:sdl2"
 
+
 // global Game struct
-g_mem: Game 
+g_mem: Game
 
 @(private)
 Game :: struct {
@@ -44,12 +45,16 @@ deinit :: proc() {
   on_game_update::proc(){ 
     fmt.println("Game Updated")
   }
-*/ 
+*/
 start :: proc() -> (success: bool) {
 	success = true
 
 	main_loop: for {
 		event: sdl.Event
+
+		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
+		sdl.RenderClear(g_mem.renderer.ren)
+
 		for sdl.PollEvent(&event) != false {
 
 			#partial switch event.type {
@@ -57,15 +62,23 @@ start :: proc() -> (success: bool) {
 				#partial switch event.key.keysym.sym {
 				case .ESCAPE:
 					break main_loop
+				case .u:
+					g.PLAYER.transform.position.x += 1
+				case .o:
+					g.PLAYER.transform.position.x -= 1
+				case .PERIOD:
+					g.PLAYER.transform.position.y -= 1
+				case .e:
+					g.PLAYER.transform.position.y += 1
 				}
 			case .QUIT:
 				break main_loop
 			}
 		}
 
-
 		g_mem.update()
 
+		sdl.RenderPresent(g_mem.renderer.ren)
 	}
 
 	return success
