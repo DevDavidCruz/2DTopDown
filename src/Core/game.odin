@@ -15,7 +15,7 @@ Game :: struct {
 	renderer: Renderer,
 	start:    proc() -> bool,
 	update:   proc(delta_time: f32),
-  render: proc()
+	render:   proc(),
 }
 
 
@@ -90,7 +90,7 @@ start :: proc() -> (success: bool) {
 		/// RENDER LOOP  //////////////////////////////////////////////////////////////////////////
 		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
 		sdl.RenderClear(g_mem.renderer.ren)
-    g_mem.render()
+		g_mem.render()
 		sdl.RenderPresent(g_mem.renderer.ren)
 		////////////////////////////////////////////////////////////////////////////////////////////
 
