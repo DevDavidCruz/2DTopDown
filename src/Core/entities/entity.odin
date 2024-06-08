@@ -6,6 +6,7 @@ Entity :: struct {
 	using transform: eng.Transform,
 	variant:         union {},
 	update:          proc(entity: ^Entity, delta_time: f32),
+	render:          proc(entity: ^Entity),
 }
 
 create :: proc(pos: eng.v2f) -> Entity {

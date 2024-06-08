@@ -15,6 +15,7 @@ Game :: struct {
 	renderer: Renderer,
 	start:    proc() -> bool,
 	update:   proc(delta_time: f32),
+	render:   proc(),
 }
 
 
@@ -59,6 +60,7 @@ start :: proc() -> (success: bool) {
 	main_loop: for {
 		FRAME_START := sdl.GetTicks()
 
+		/// EVENTS LOOP  //////////////////////////////////////////////////////////////////////////
 		event: sdl.Event
 		for sdl.PollEvent(&event) != false {
 
@@ -75,8 +77,8 @@ start :: proc() -> (success: bool) {
 				break main_loop
 			}
 		}
-		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
-		sdl.RenderClear(g_mem.renderer.ren)
+		////////////////////////////////////////////////////////////////////////////////////////////
+
 
 		/// PHYSICS LOOP  //////////////////////////////////////////////////////////////////////////
 		CURRENT_TIME: u32 = sdl.GetTicks()
@@ -85,7 +87,12 @@ start :: proc() -> (success: bool) {
 		LAST_UPDATE = CURRENT_TIME
 		////////////////////////////////////////////////////////////////////////////////////////////
 
+		/// RENDER LOOP  //////////////////////////////////////////////////////////////////////////
+		sdl.SetRenderDrawColor(g_mem.renderer.ren, 0, 0, 0, 255)
+		sdl.RenderClear(g_mem.renderer.ren)
+		g_mem.render()
 		sdl.RenderPresent(g_mem.renderer.ren)
+		////////////////////////////////////////////////////////////////////////////////////////////
 
 		FRAME_END := sdl.GetTicks()
 		FRAME_TIME: f32 = f32(FRAME_END - FRAME_START) / 1000.0

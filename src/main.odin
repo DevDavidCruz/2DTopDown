@@ -24,6 +24,7 @@ main :: proc() {
 		g.WIN_HEIGHT = 1080
 		g.PLAYER = ent.create({0.0, 0.0})
 		g.PLAYER.update = on_player_update
+		g.PLAYER.render = player_render
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		//// INITIALIZE GAME /////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +32,7 @@ main :: proc() {
 		assert(res == true, "Failed to initialize game")
 		defer game.deinit()
 		game.g_mem.update = on_game_update
+		game.g_mem.render = render
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		game.start()
@@ -47,16 +49,40 @@ main :: proc() {
 
 
 on_game_update :: proc(delta_time: f32) {
-  fmt.println("Delta time = ", delta_time)
-	game.render_entity(&game.g_mem.renderer, &g.PLAYER)
 	g.PLAYER.update(&g.PLAYER, delta_time)
 }
 
 
-on_player_update :: proc(entity: ^ent.Entity, delta_time: f32) {
-  speed : f32 = 250.0
-	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.U] * 1) * delta_time * speed
-	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.O] * (-1)) * delta_time * speed
-	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.PERIOD] * (-1)) * delta_time * speed
-	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.E] * (1)) * delta_time * speed
+render :: proc() {
+	g.PLAYER.render(&g.PLAYER)
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// PLAYER SPECIFIC METHODS //////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// Update method for player
+on_player_update :: proc(entity: ^ent.Entity, delta_time: f32) {
+	speed: f32 = 250.0
+	delta_speed := delta_time * speed
+	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.U] * 1) * delta_speed
+	entity.transform.position.x += f32(io.KEY_STATE[sdl.Keycode.O] * (-1)) * delta_speed
+	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.PERIOD] * (-1)) * delta_speed
+	entity.transform.position.y += f32(io.KEY_STATE[sdl.Keycode.E] * (1)) * delta_speed
+}
+
+// Render method for player
+player_render :: proc(entity: ^ent.Entity) {
+	rect: sdl.FRect
+	rect.x = entity.transform.position.x
+	rect.y = entity.transform.position.y
+	rect.w = 16
+	rect.h = 16
+	sdl.SetRenderDrawColor(game.g_mem.renderer.ren, 255, 0, 0, 255)
+	sdl.RenderFillRectF(game.g_mem.renderer.ren, &rect)
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
