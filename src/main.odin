@@ -54,7 +54,6 @@ on_game_update :: proc(delta_time: f32) {
 
 
 render :: proc() {
-	game.render_entity(&game.g_mem.renderer, &g.PLAYER)
 	g.PLAYER.render(&g.PLAYER)
 }
 
